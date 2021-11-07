@@ -4,25 +4,33 @@
 # authors: Alan-Liang
 # url: https://github.com/acm-21/discourse-onebox-acmoj
 
-class Onebox::Engine::AcmojOnebox
-  include Onebox::Engine
+require_relative "../../lib/onebox"
 
-  matches_regexp(/^https:\/\/acm\.sjtu\.edu\.cn\/OnlineJudge\//)
-  always_https
+Onebox = Onebox
 
-  def to_html
-    return '<strong>Onebox aborted: malicious request detected in #{CGI::escapeHTML(uri.path)}</strong>' if CGI::unescape(CGI::unescapeHTML(CGI::escapeHTML(uri.path))).include? 'logout'
-    <<-HTML
-      <iframe
-        src="#{CGI::escapeHTML(uri.path)}"
-        border="0"
-        frameborder="no"
-        framespacing="0"
-        width="100%"></iframe>
-    HTML
-  end
+module Onebox
+  module Engine
+    class AcmojOnebox
+      include Engine
 
-  def placeholder_html
-    to_html
+      matches_regexp(/^https:\/\/acm\.sjtu\.edu\.cn\/OnlineJudge\//)
+      always_https
+
+      def to_html
+        return "<strong>Onebox aborted: malicious request detected in #{CGI::escapeHTML(@url)}</strong>" if CGI::unescape(CGI::unescapeHTML(CGI::escapeHTML(@url))).include? 'logout'
+        <<-HTML
+          <iframe
+            src="#{CGI::escapeHTML(@url)}"
+            border="0"
+            frameborder="no"
+            framespacing="0"
+            width="100%"></iframe>
+        HTML
+      end
+
+      def placeholder_html
+        to_html
+      end
+    end
   end
 end
