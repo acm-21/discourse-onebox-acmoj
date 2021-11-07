@@ -24,7 +24,8 @@ module Onebox
             border="0"
             frameborder="no"
             framespacing="0"
-            width="100%"></iframe>
+            width="100%"
+            height="512px"></iframe>
         HTML
       end
 
